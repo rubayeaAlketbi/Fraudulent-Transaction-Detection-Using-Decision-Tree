@@ -46,7 +46,10 @@ def statistics_data(data):
     data=filter_data(data)
     # Calculate the mean and standard deviation for each feature
     # Insert your code here for task 3
-
+    data = data.dropna() # removes the rows with nan values
+    mean = data.mean() # gets the mean of the data
+    std = data.std() # gets the standard deviation of the data
+    coefficient_of_variation = std/mean # calculates the coefficient of variation
     return coefficient_of_variation
 
 # Task 4 [10 marks]: Split the dataset into training (70%) and testing sets (30%), 
