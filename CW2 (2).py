@@ -37,7 +37,7 @@ def load_data(file_path, delimiter=','):
 def filter_data(data):
     filtered_data=[None]*1
     # Insert your code here for task 2
-
+    filtered_data = data[data!=-99].dropna() # removes the rows with -99 values and NaN values
     return filtered_data
 
 # Task 3 [10 marks]: Data statistics, return the coefficient of variation for each feature, make sure to remove the rows with nan before doing this. 
