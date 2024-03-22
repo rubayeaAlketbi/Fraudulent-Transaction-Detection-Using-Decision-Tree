@@ -24,6 +24,13 @@ def load_data(file_path, delimiter=','):
         warnings.warn(f"Task 1: Warning - CSV file '{file_path}' does not exist.")
         return None, None, None
     # Insert your code here for task 1
+    try:
+        data = pd.read_csv(file_path, delimiter=delimiter) # reads the data from the file
+        num_rows = data.shape[0] # gets the number of rows in the data
+        header_list = list(data.columns) # gets the header list of the data
+    except Exception as e:
+        warnings.warn(f"Task 1: Warning - Error in reading the CSV file '{file_path}'. {e}")
+        return None, None, None
     return num_rows, data, header_list
 
 # Task 2[10 marks]: Give back the data by removing the rows with -99 values 
