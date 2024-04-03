@@ -59,8 +59,17 @@ def statistics_data(data):
 def split_data(data, test_size=0.3, random_state=1):
     x_train, x_test, y_train, y_test=None, None, None, None
     np.random.seed(1)
-    # Insert your code here for task 4
-
+    # Split the data into labels and features. X : Features , Y : Labels
+    X = data.iloc[:, :-1]  # Select all columns except the last one as features
+    y = data.iloc[:, -1]   # Select the last column as the label
+    
+    # Split the data into training and testing sets, ensuring stratification
+    x_train, x_test, y_train, y_test = train_test_split(
+        X, y, 
+        test_size=test_size, 
+        random_state=random_state, 
+        stratify=y
+    )
     return x_train, x_test, y_train, y_test
 
 # Task 5 [10 marks]: Train a decision tree model with cost complexity parameter of 0
