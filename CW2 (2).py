@@ -75,19 +75,26 @@ def split_data(data, test_size=0.3, random_state=1):
 # Task 5 [10 marks]: Train a decision tree model with cost complexity parameter of 0
 def train_decision_tree(x_train, y_train,ccp_alpha=0):
     model=None
-    # Insert your code here for task 5
+    # Initialize the DecisionTreeClassifier with the specified ccp_alpha
+    model = DecisionTreeClassifier(ccp_alpha=ccp_alpha, random_state=1)
+    # Fit (train) the model on the training data
+    model.fit(x_train, y_train)
+    
     return model
 
 # Task 6 [10 marks]: Make predictions on the testing set 
 def make_predictions(model, X_test):
     y_test_predicted=None
-    # Insert your code here for task 6
+    y_test_predicted = model.predict(X_test)
     return y_test_predicted
 
 # Task 7 [10 marks]: Evaluate the model performance by taking test dataset and giving back the accuracy and recall 
 def evaluate_model(model, x, y):
-    accuracy, recall=None,None
-    # Insert your code here for task 7
+    y_pred = make_predictions(model, x)
+    # Calculate accuracy by comparing the predicted labels with the true labels
+    accuracy = accuracy_score(y, y_pred)
+    # Calculate recall by comparing the predicted labels with the true labels
+    recall = recall_score(y, y_pred)
     return accuracy, recall
 
 # Task 8 [10 marks]: Write a function that gives the optimal value for cost complexity parameter
@@ -112,6 +119,11 @@ def important_feature(x_train, y_train,header_list):
     # Train decision tree model and increase Cost Complexity Parameter until the depth reaches 1
     # Insert your code here for task 10
     return best_feature
+
+
+
+
+'''Main Section'''
 # Example usage (Template Main section):
 if __name__ == "__main__":
     # Load data
@@ -132,6 +144,7 @@ if __name__ == "__main__":
     for header, coef_var in zip(header_list[:-1], coefficient_of_variation):
         print(f"{header}: {coef_var}")
     print("-" * 50)
+    
     # Split data
     x_train, x_test, y_train, y_test = split_data(data_filtered)
     print(f"Train set size: {len(x_train)}")
@@ -148,19 +161,23 @@ if __name__ == "__main__":
     acc_test, recall_test = evaluate_model(model, x_test, y_test)
     print(f"Initial Decision Tree - Test Accuracy: {acc_test:.2%}, Recall: {recall_test:.2%}")
     print("-" * 50)
+    
     # Train Pruned Decision Tree
     model_pruned = train_decision_tree(x_train, y_train, ccp_alpha=0.002)
     print("Pruned Decision Tree Structure:")
     print_tree_structure(model_pruned, header_list)
     print("-" * 50)
+    
     # Evaluate pruned model
     acc_test_pruned, recall_test_pruned = evaluate_model(model_pruned, x_test, y_test)
     print(f"Pruned Decision Tree - Test Accuracy: {acc_test_pruned:.2%}, Recall: {recall_test_pruned:.2%}")
     print("-" * 50)
+    
     # Find optimal ccp_alpha
     optimal_alpha = optimal_ccp_alpha(x_train, y_train, x_test, y_test)
     print(f"Optimal ccp_alpha for pruning: {optimal_alpha:.4f}")
     print("-" * 50)
+    
     # Train Pruned and Optimized Decision Tree
     model_optimized = train_decision_tree(x_train, y_train, ccp_alpha=optimal_alpha)
     print("Optimized Decision Tree Structure:")
