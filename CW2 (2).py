@@ -151,14 +151,30 @@ def optimal_ccp_alpha(x_train, y_train, x_test, y_test):
 def tree_depths(model):
     depth=None
     # Get the depth of the unpruned tree
-    # Insert your code here for task 9
+    depth = model.get_depth()
     return depth
 
  # Task 10 [10 marks]: Feature importance 
 def important_feature(x_train, y_train,header_list):
     best_feature=None
     # Train decision tree model and increase Cost Complexity Parameter until the depth reaches 1
-    # Insert your code here for task 10
+    tree = DecisionTreeClassifier(random_state=0)
+    tree.fit(x_train, y_train)
+   # Calculate the cost complexity pruning path
+    path = tree.cost_complexity_pruning_path(x_train, y_train)
+    cpp_alphas = path.ccp_alphas
+    
+    # Iterate over the ccp_alphas to find the best feature
+    for ccp_alpha in cpp_alphas:
+        # Train the decision tree with the current ccp_alpha
+        tree = DecisionTreeClassifier(random_state=0, ccp_alpha=ccp_alpha)
+        tree.fit(x_train, y_train)
+        # Check if the tree length is 1
+        if tree.get_depth() == 1:
+            break
+        
+    # Get the feature importance
+    best_feature = header_list[np.argmax(tree.feature_importances_)]
     return best_feature
 
 
@@ -249,9 +265,7 @@ References:
  - Line 94 is inspired from https://www.geeksforgeeks.org/learning-model-building-scikit-learn-python-machine-learning-library/
  - Line 100 is inspired from https://www.askpython.com/python/examples/python-predict-function
  - Line 106-109 is inspired from https://www.linkedin.com/pulse/basics-decision-tree-python-omkar-sutar#:~:text=To%20calculate%20the%20accuracy%20score,from%20the%20scikit%2Dlearn%20library.&text=In%20this%20code%2C%20y_test%20is,by%20the%20decision%20tree%20model.
- 
- 
-'''
+ - Line 154 is inspired from https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier.get_depth'''
 
 
 
