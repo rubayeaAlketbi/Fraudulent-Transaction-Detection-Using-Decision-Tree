@@ -38,25 +38,24 @@ def load_data(file_path, delimiter=','):
 
 # Task 2[10 marks]: Give back the data by removing the rows with -99 values 
 def filter_data(data):
-    filtered_data=[None]*1
-    # Store the indices to drop
-    indices_to_drop = []
-    # Iterate over DataFrame rows
-    for index, row in data.iterrows():
-        # Check if -99 is in the row values
-        if -99 in row.values:
-            # Add the index to the list of indices to drop
-            indices_to_drop.append(index)     
-    # Drop the rows
-    filtered_data = data.drop(indices_to_drop)
-    return filtered_data
+    # Find the indices to delete first
+    indices_to_delete = []
+    for i in range(len(data)):
+        if -99 in data[i]:
+            indices_to_delete.append(i)
+    # Reverse the indices to delete to avoid index shifting issues
+    indices_to_delete.reverse()
+    # Delete rows from the end to avoid messing up the indices
+    for index in indices_to_delete:
+        data = np.delete(data, index, axis=0)
+    return data
 
 # Task 3 [10 marks]: Data statistics, return the coefficient of variation for each feature, make sure to remove the rows with nan before doing this. 
 def statistics_data(data):
     coefficient_of_variation=None
     data=filter_data(data)
     # removes the rows with nan values
-    data = data.dropna()
+    #data = data.dropna()
     # get the mean and standard deviation of the data 
     mean = data.mean() 
     std = data.std()
@@ -257,7 +256,7 @@ if __name__ == "__main__":
         
 '''
 References: 
- - Task 2-3 is referenced from pandas documentation at https://pandas.pydata.org/docs/
+ - Line 49-51 is referenced by https://numpy.org/doc/stable/reference/generated/numpy.delete.html
  - Line 65 , the coeficient of variation formula is referenced from https://en.wikipedia.org/wiki/Coefficient_of_variation
  - Line 76-78 is inspired from https://stackoverflow.com/questions/46519539/how-to-select-all-non-nan-columns-and-non-nan-last-column-using-pandas
  - Line 80-85 is inspired from https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
